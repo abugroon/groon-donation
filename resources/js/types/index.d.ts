@@ -23,6 +23,7 @@ export type AppPageProps<
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    navigation: Record<string, string>;
     sidebarOpen: boolean;
 };
 
@@ -30,6 +31,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    role: string;
     avatar?: string;
     email_verified_at: string | null;
     created_at: string;

@@ -11,32 +11,70 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { dashboard, home } from '@/routes';
+import { create as createProject, index as projectsIndex } from '@/routes/projects';
+import type { AppPageProps, NavItem } from '@/types';
+import { Link, usePage } from '@inertiajs/vue3';
+import {
+    HeartHandshake,
+    Home as HomeIcon,
+    LayoutGrid,
+    LifeBuoy,
+    Mail,
+    PlusCircle,
+} from 'lucide-vue-next';
+import { computed } from 'vue';
 import AppLogo from './AppLogo.vue';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-];
+const page = usePage<AppPageProps>();
+const authUser = computed(() => page.props.auth?.user ?? null);
+const navigation = computed(() => page.props.navigation ?? {});
 
-const footerNavItems: NavItem[] = [
+const mainNavItems = computed<NavItem[]>(() => {
+    const items: NavItem[] = [
+        {
+            title: navigation.value.home ?? 'Home',
+            href: home(),
+            icon: HomeIcon,
+        },
+        {
+            title: navigation.value.projects ?? 'Projects',
+            href: projectsIndex(),
+            icon: HeartHandshake,
+        },
+    ];
+
+    if (authUser.value) {
+        items.push({
+            title: navigation.value.dashboard ?? 'Dashboard',
+            href: dashboard(),
+            icon: LayoutGrid,
+        });
+    }
+
+    if (authUser.value?.role === 'admin') {
+        items.push({
+            title: navigation.value.manage_projects ?? 'Manage projects',
+            href: createProject(),
+            icon: PlusCircle,
+        });
+    }
+
+    return items;
+});
+
+const footerNavItems = computed<NavItem[]>(() => [
     {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
+        title: navigation.value.help_center ?? 'Help center',
+        href: 'https://charityhub.example/help',
+        icon: LifeBuoy,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
+        title: navigation.value.contact ?? 'Contact support',
+        href: 'mailto:team@charityhub.test',
+        icon: Mail,
     },
-];
+]);
 </script>
 
 <template>
@@ -45,7 +83,7 @@ const footerNavItems: NavItem[] = [
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link :href="dashboard()">
+                        <Link :href="home()">
                             <AppLogo />
                         </Link>
                     </SidebarMenuButton>
@@ -54,7 +92,10 @@ const footerNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain :items="mainNavItems" />
+            <NavMain
+                :items="mainNavItems"
+                :label="navigation.menu ?? 'Menu'"
+            />
         </SidebarContent>
 
         <SidebarFooter>
