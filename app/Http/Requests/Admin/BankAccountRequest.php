@@ -21,7 +21,7 @@ class BankAccountRequest extends FormRequest
             'account_name' => ['required', 'string', 'max:150'],
             'bank_name' => ['required', 'string', 'max:150'],
             'iban' => '',
-            'account_number' => ['required', 'string', 'max:100','min:7'],
+            'account_number' => ['required','unique:bank_accounts,account_number', 'string', 'max:100','min:7'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ];
     }
