@@ -18,6 +18,7 @@ return [
     'back_to_project' => 'Back to project',
     'cash_description' => 'Cash description',
     'receipt' => 'Transfer receipt',
+    'view_receipt' => 'View receipt in full screen',
     'status_label' => 'Donation status',
     'bank_account' => 'Receiving bank account',
     'method_bank' => 'Bank transfer',

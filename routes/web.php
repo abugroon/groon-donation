@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BankAccountController;
 use App\Http\Controllers\Admin\DonationReviewController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\HomeController;
@@ -24,6 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('projects/{project}', [AdminProjectController::class, 'show'])->name('projects.show');
         Route::get('donations/{donation}/review', [DonationReviewController::class, 'show'])->name('donations.review');
         Route::put('donations/{donation}/review', [DonationReviewController::class, 'update'])->name('donations.updateStatus');
+        Route::resource('users', UserController::class)->except(['show']);
     });
 });
 

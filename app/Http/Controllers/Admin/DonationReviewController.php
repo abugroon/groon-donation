@@ -61,6 +61,7 @@ class DonationReviewController extends Controller
                     'method' => __('donations.payment_method'),
                     'cash_description' => __('donations.cash_description'),
                     'receipt' => __('donations.receipt'),
+                    'view_receipt' => __('donations.view_receipt'),
                     'status' => __('donations.status_label'),
                     'bank_account' => __('donations.bank_account'),
                     'anonymous' => __('donations.anonymous'),

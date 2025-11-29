@@ -23,6 +23,7 @@ import {
     LifeBuoy,
     Mail,
     PlusCircle,
+    UserRound,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from './AppLogo.vue';
@@ -64,6 +65,11 @@ const mainNavItems = computed<NavItem[]>(() => {
                 title: navigation.value.bank_accounts ?? 'Bank accounts',
                 href: '/admin/bank-accounts',
                 icon: Building2,
+            },
+            {
+                title: navigation.value.users ?? 'Users',
+                href: '/admin/users',
+                icon: UserRound,
             },
         );
     }

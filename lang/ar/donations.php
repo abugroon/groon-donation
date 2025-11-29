@@ -18,6 +18,7 @@ return [
     'back_to_project' => 'العودة للمشروع',
     'cash_description' => 'وصف الدفع النقدي',
     'receipt' => 'إيصال التحويل',
+    'view_receipt' => 'عرض الإيصال بالحجم الكامل',
     'status_label' => 'حالة التبرع',
     'bank_account' => 'الحساب البنكي المستلم',
     'method_bank' => 'حوالة بنكية',

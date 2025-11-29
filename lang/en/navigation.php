@@ -6,6 +6,7 @@ return [
     'dashboard' => 'Dashboard',
     'donations' => 'Donations',
     'bank_accounts' => 'Bank accounts',
+    'users' => 'Users',
     'manage_projects' => 'Manage projects',
     'settings' => 'Settings',
     'login' => 'Sign in',

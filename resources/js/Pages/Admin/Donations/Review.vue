@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { BreadcrumbItemType } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { dashboard } from '@/routes';
 import { formatNumber } from '@/utils/formatNumber';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 interface Donation {
     id: number;
@@ -55,6 +56,14 @@ const form = useForm({
     status: props.donation.status as Donation['status'],
     bank_account_id: props.donation.bank_account_id ?? '',
 });
+
+const showReceipt = ref(false);
+const receiptIsImage = computed(
+    () =>
+        !!props.donation.transfer_receipt_url?.match(
+            /(\.png|\.jpg|\.jpeg|\.gif|\.webp|\.svg)$/i,
+        ),
+);
 
 const submit = () => {
     form.put(`/admin/donations/${props.donation.id}/review`);
@@ -117,14 +126,43 @@ const submit = () => {
 
                         <div v-if="donation.transfer_receipt_url" class="flex flex-col gap-2">
                             <span class="text-muted-foreground">{{ translations.fields.receipt }}</span>
-                            <a
-                                :href="donation.transfer_receipt_url"
-                                class="text-primary hover:underline"
-                                target="_blank"
-                                rel="noopener"
-                            >
-                                {{ translations.fields.receipt }}
-                            </a>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <a
+                                    :href="donation.transfer_receipt_url"
+                                    class="text-primary hover:underline"
+                                    target="_blank"
+                                    rel="noopener"
+                                >
+                                    {{ translations.fields.receipt }}
+                                </a>
+
+                                <Dialog v-model:open="showReceipt">
+                                    <DialogTrigger as-child>
+                                        <Button size="sm" variant="outline">
+                                            {{ translations.fields.view_receipt }}
+                                        </Button>
+                                    </DialogTrigger>
+                                    <DialogContent class="max-w-5xl">
+                                        <DialogHeader>
+                                            <DialogTitle>{{ translations.fields.receipt }}</DialogTitle>
+                                        </DialogHeader>
+                                        <div class="max-h-[80vh] overflow-auto">
+                                            <img
+                                                v-if="receiptIsImage"
+                                                :src="donation.transfer_receipt_url"
+                                                alt="Receipt"
+                                                class="mx-auto max-h-[75vh] w-full rounded-md object-contain"
+                                            />
+                                            <iframe
+                                                v-else
+                                                :src="donation.transfer_receipt_url"
+                                                class="h-[75vh] w-full rounded-md"
+                                                allowfullscreen
+                                            />
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
                         </div>
                     </div>
 
