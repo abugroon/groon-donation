@@ -134,28 +134,6 @@ const summaryRows = computed(() =>
                     </div>
                 </CardContent>
             </Card>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle class="text-xl font-semibold">{{ translations.sql_examples }}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <pre class="overflow-auto rounded-md bg-muted p-4 text-left text-xs" dir="ltr">
--- إجمالي المبالغ وعدد التبرعات لكل حساب بنكي مرتبط
-SELECT bank_account_id, COUNT(*) AS donations_count, SUM(amount) AS total_amount
-FROM donations
-WHERE project_id = {{ project.id }} AND status = 'approved'
-GROUP BY bank_account_id;
-
--- تحديث حالة المشروع عند الوصول للهدف
-UPDATE projects
-SET collected_amount = (SELECT COALESCE(SUM(amount),0) FROM donations WHERE status='approved' AND project_id = projects.id),
-    progress = ROUND(LEAST(100, (collected_amount / target_amount) * 100), 2),
-    status = CASE WHEN collected_amount >= target_amount THEN 'completed' WHEN collected_amount > 0 THEN 'in_progress' ELSE 'open' END
-WHERE id = {{ project.id }};
-                    </pre>
-                </CardContent>
-            </Card>
         </div>
     </AppLayout>
 </template>
