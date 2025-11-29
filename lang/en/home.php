@@ -35,5 +35,6 @@ return [
     'contact_title' => 'Contact the team',
     'contact_description' => 'We are here to help with onboarding, partnership opportunities, and donor support questions.',
     'contact_email_label' => 'Email us',
+    'privacy_policy' => 'Privacy policy',
     'empty_featured' => 'No featured projects yet—launch a new campaign and inspire the community today.',
 ];
