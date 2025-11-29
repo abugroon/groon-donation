@@ -28,10 +28,10 @@ class DatabaseSeeder extends Seeder
     private function seedAdminUser(): void
     {
         User::updateOrCreate(
-            ['email' => 'moawia@test.com'],
+            ['email' => 'moawiaabugroon@gmail.com'],
             [
                 'name' => 'Administrator',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('07878980'),
                 'role' => 'admin',
             ],
         );
