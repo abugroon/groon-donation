@@ -4,8 +4,8 @@
     <div class="card">
         <h2>{{ $project->name }}</h2>
         <p class="text-muted">{{ $project->description }}</p>
-        <p><strong>المستهدف:</strong> {{ number_format($project->target_amount, 2) }} ر.س</p>
-        <p><strong>المجموع المعتمد:</strong> {{ number_format($project->collected_amount, 2) }} ر.س ({{ $project->progress }}%)</p>
+        <p><strong>المستهدف:</strong> {{ number_format($project->target_amount, 2) }} SD</p>
+        <p><strong>المجموع المعتمد:</strong> {{ number_format($project->collected_amount, 2) }} SD ({{ $project->progress }}%)</p>
         <p><strong>الحالة:</strong> {{ $project->status === 'completed' ? 'مكتمل' : ($project->status === 'in_progress' ? 'قيد التنفيذ' : 'مفتوح') }}</p>
     </div>
 
@@ -26,7 +26,7 @@
                 @endphp
                 <tr>
                     <td>{{ $account->account_name }} ({{ $account->bank_name }})</td>
-                    <td>{{ number_format($summary->total_amount ?? 0, 2) }} ر.س</td>
+                    <td>{{ number_format($summary->total_amount ?? 0, 2) }} SD</td>
                     <td>{{ $summary->donations_count ?? 0 }}</td>
                 </tr>
             @endforeach

@@ -7,7 +7,7 @@
         <h2>مراجعة التبرع رقم {{ $donation->id }}</h2>
         <p><strong>المشروع:</strong> {{ $donation->project->name }}</p>
         <p><strong>اسم المتبرع:</strong> {{ $donation->anonymous ? 'متبرع مجهول' : ($donation->donor_name ?: 'غير متوفر') }}</p>
-        <p><strong>المبلغ:</strong> {{ number_format($donation->amount, 2) }} ر.س</p>
+        <p><strong>المبلغ:</strong> {{ number_format($donation->amount, 2) }} SD</p>
         <p><strong>طريقة التبرع:</strong> {{ $donation->method === 'bank' ? 'بنك' : 'نقد' }}</p>
         @if($donation->method === 'cash')
             <p><strong>وصف التبرع النقدي:</strong> {{ $donation->cash_description }}</p>

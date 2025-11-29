@@ -156,7 +156,7 @@ watch(
                                         {{ donation.anonymous ? translations.anonymous : donation.donor_name }}
                                     </td>
                                     <td class="px-4 py-3 font-semibold">
-                                        {{ formatNumber(donation.amount) }} ر.س
+                                        {{ formatNumber(donation.amount) }} SD
                                     </td>
                                     <td class="px-4 py-3">{{ donation.project.name }}</td>
                                     <td class="px-4 py-3">{{ formattedDate(donation.created_at) }}</td>
@@ -189,7 +189,7 @@ watch(
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        <div class="flex flex-wrap items-center justify-center gap-2">
+                                        <div class="flex flex-wrap items-center justify-center gap-2" v-if="donation.status === 'pending'">
                                             <Button
                                                 size="sm"
                                                 class="bg-emerald-600 text-emerald-50 hover:bg-emerald-700"
@@ -275,7 +275,7 @@ watch(
 
                 <div class="grid gap-1 text-sm">
                     <span class="text-muted-foreground">{{ translations.fields.amount }}</span>
-                    <span class="text-lg font-semibold">{{ formatNumber(selectedDonation.amount) }} ر.س</span>
+                    <span class="text-lg font-semibold">{{ formatNumber(selectedDonation.amount) }} SD</span>
                 </div>
 
                 <div class="grid gap-1 text-sm">

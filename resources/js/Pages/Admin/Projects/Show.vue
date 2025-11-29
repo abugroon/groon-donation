@@ -85,11 +85,11 @@ const summaryRows = computed(() =>
                     <div class="grid gap-2 md:grid-cols-2 lg:grid-cols-4">
                         <div class="rounded-lg bg-muted/60 p-3">
                             <div class="text-xs text-muted-foreground">{{ translations.labels.target }}</div>
-                            <div class="text-lg font-semibold">{{ formatNumber(project.target_amount) }} ر.س</div>
+                            <div class="text-lg font-semibold">{{ formatNumber(project.target_amount) }} SD</div>
                         </div>
                         <div class="rounded-lg bg-muted/60 p-3">
                             <div class="text-xs text-muted-foreground">{{ translations.labels.collected }}</div>
-                            <div class="text-lg font-semibold">{{ formatNumber(project.collected_amount) }} ر.س</div>
+                            <div class="text-lg font-semibold">{{ formatNumber(project.collected_amount) }} SD</div>
                         </div>
                         <div class="rounded-lg bg-muted/60 p-3">
                             <div class="text-xs text-muted-foreground">{{ translations.labels.progress }}</div>
@@ -126,7 +126,7 @@ const summaryRows = computed(() =>
                                         {{ account.account_name }}
                                     </td>
                                     <td class="px-4 py-3">{{ account.bank_name }}</td>
-                                    <td class="px-4 py-3">{{ formatNumber(account.total_amount) }} ر.س</td>
+                                    <td class="px-4 py-3">{{ formatNumber(account.total_amount) }} SD</td>
                                     <td class="px-4 py-3">{{ account.donations_count }}</td>
                                 </tr>
                             </tbody>

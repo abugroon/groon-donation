@@ -95,7 +95,7 @@ const submit = () => {
                     <div class="grid gap-2 rounded-lg border border-border p-4 text-sm">
                         <div class="flex flex-col gap-1">
                             <span class="text-muted-foreground">{{ translations.fields.amount }}</span>
-                            <span class="text-lg font-semibold">{{ formatNumber(donation.amount) }} ر.س</span>
+                            <span class="text-lg font-semibold">{{ formatNumber(donation.amount) }} SD</span>
                         </div>
 
                         <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
