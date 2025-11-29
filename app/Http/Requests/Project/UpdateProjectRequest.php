@@ -28,7 +28,6 @@ class UpdateProjectRequest extends FormRequest
             'collected_amount' => ['sometimes', 'required', 'numeric', 'min:0'],
             'status' => ['sometimes', 'required', 'in:open,in_progress,completed'],
             'start_date' => ['sometimes', 'required', 'date'],
-            'end_date' => ['sometimes', 'required', 'date', 'after_or_equal:start_date'],
             'image' => ['nullable', 'image'],
         ];
     }

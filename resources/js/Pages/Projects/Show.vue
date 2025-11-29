@@ -25,14 +25,17 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { index as projectsIndex, show as showProject } from '@/routes/projects';
 import { store as storeDonation } from '@/routes/donations';
 import { dashboard } from '@/routes';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
+import { formatNumber } from '@/utils/formatNumber';
 
 interface Donation {
     id: number;
     donor_name: string | null;
     amount: number;
-    is_anonymous: boolean;
-    payment_method: string | null;
+    anonymous: boolean;
+    method: string;
+    status: string;
+    bank_account_id: number | null;
     created_at: string;
 }
 
@@ -46,8 +49,6 @@ interface Project {
     progress: number;
     image_url?: string | null;
     start_date?: string | null;
-    end_date?: string | null;
-    end_date_formatted?: string | null;
     donations: Donation[];
 }
 
@@ -74,11 +75,6 @@ const props = defineProps<{
     translations: Translations;
 }>();
 
-const numberFormatter = new Intl.NumberFormat(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-});
-
 const breadcrumbs = computed<BreadcrumbItemType[]>(() => [
     { title: props.translations.dashboardTitle, href: dashboard() },
     { title: props.translations.projectsTitle, href: projectsIndex() },
@@ -91,27 +87,30 @@ const form = useForm({
     project_id: props.project.id,
     donor_name: '',
     amount: '',
-    is_anonymous: false,
-    payment_method: '',
+    anonymous: false,
+    method: 'cash',
+    cash_description: '',
+    bank_account_id: '',
+    transfer_receipt: null as File | null,
 });
-
-watch(
-    () => form.is_anonymous,
-    (value) => {
-        if (value) {
-            form.donor_name = '';
-        }
-    },
-);
 
 const submitDonation = () => {
     form.post(storeDonation(), {
         preserveScroll: true,
+        forceFormData: true,
         onSuccess: () => {
             donationDialogOpen.value = false;
-            form.reset('donor_name', 'amount', 'payment_method', 'is_anonymous');
+            form.reset('donor_name', 'amount', 'method', 'cash_description', 'bank_account_id', 'transfer_receipt', 'anonymous');
+            form.method = 'cash';
+            form.transfer_receipt = null;
         },
     });
+};
+
+const onReceiptChange = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const [file] = target.files ?? [];
+    form.transfer_receipt = file ?? null;
 };
 
 const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`;
@@ -141,11 +140,11 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                         </span>
                         <span class="text-muted-foreground">
                             {{ translations.target_label }}:
-                            {{ numberFormatter.format(project.target_amount) }}
+                            {{ formatNumber(project.target_amount) }}
                         </span>
                         <span class="text-muted-foreground">
                             {{ translations.collected_label }}:
-                            {{ numberFormatter.format(project.collected_amount) }}
+                            {{ formatNumber(project.collected_amount) }}
                         </span>
                     </div>
 
@@ -185,21 +184,15 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                     <div class="grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
                         <div>
                             <span class="font-medium text-foreground">{{ translations.target_label }}: </span>
-                            {{ numberFormatter.format(project.target_amount) }}
+                            {{ formatNumber(project.target_amount) }}
                         </div>
                         <div>
                             <span class="font-medium text-foreground">{{ translations.collected_label }}: </span>
-                            {{ numberFormatter.format(project.collected_amount) }}
+                            {{ formatNumber(project.collected_amount) }}
                         </div>
                         <div v-if="project.start_date">
                             <span class="font-medium text-foreground">{{ translations.fields.start_date }}: </span>
                             {{ project.start_date }}
-                        </div>
-                        <div
-                            v-if="project.status === 'completed' && project.end_date_formatted"
-                        >
-                            <span class="font-medium text-foreground">{{ translations.fields.end_date }}: </span>
-                            {{ project.end_date_formatted }}
                         </div>
                     </div>
                 </CardContent>
@@ -220,7 +213,6 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                                     <Input
                                         id="donor_name"
                                         v-model="form.donor_name"
-                                        :disabled="form.is_anonymous"
                                         :placeholder="translations.donor_label"
                                     />
                                     <InputError :message="form.errors.donor_name" />
@@ -239,16 +231,43 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                                     <InputError :message="form.errors.amount" />
                                 </div>
                                 <div class="grid gap-2">
-                                    <Label for="payment_method">{{ translations.payment_method_label }}</Label>
+                                    <Label for="method">طريقة التبرع</Label>
+                                    <select
+                                        id="method"
+                                        v-model="form.method"
+                                        class="rounded-md border border-input px-3 py-2 text-sm shadow-sm"
+                                    >
+                                        <option value="bank">بنك</option>
+                                        <option value="cash">نقد</option>
+                                    </select>
+                                    <InputError :message="form.errors.method" />
+                                </div>
+                                <div class="grid gap-2" v-if="form.method === 'cash'">
+                                    <Label for="cash_description">وصف التسليم النقدي</Label>
                                     <Input
-                                        id="payment_method"
-                                        v-model="form.payment_method"
-                                        :placeholder="translations.payment_method_label"
+                                        id="cash_description"
+                                        v-model="form.cash_description"
+                                        placeholder="أدخل تفاصيل الاستلام"
                                     />
-                                    <InputError :message="form.errors.payment_method" />
+                                    <InputError :message="form.errors.cash_description" />
+                                </div>
+                                <div class="grid gap-2" v-if="form.method === 'bank'">
+                                    <Label for="bank_account_id">حساب بنكي مرتبط</Label>
+                                    <Input
+                                        id="bank_account_id"
+                                        v-model="form.bank_account_id"
+                                        type="number"
+                                        placeholder="أدخل رقم الحساب البنكي المرتبط"
+                                    />
+                                    <InputError :message="form.errors.bank_account_id" />
+                                </div>
+                                <div class="grid gap-2">
+                                    <Label for="transfer_receipt">إيصال التحويل</Label>
+                                    <Input id="transfer_receipt" type="file" accept="image/*,.pdf" @change="onReceiptChange" />
+                                    <InputError :message="form.errors.transfer_receipt" />
                                 </div>
                                 <Label class="flex items-center gap-2">
-                                    <Checkbox v-model:checked="form.is_anonymous" />
+                                    <Checkbox v-model:checked="form.anonymous" />
                                     <span>{{ translations.anonymous_label }}</span>
                                 </Label>
                                 <DialogFooter class="gap-2">
@@ -289,17 +308,17 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                             <div class="flex items-center justify-between font-medium">
                                 <span>
                                     {{
-                                        donation.is_anonymous
+                                        donation.anonymous
                                             ? translations.anonymous_label
                                             : donation.donor_name ?? translations.anonymous_label
                                     }}
                                 </span>
                                 <span class="text-primary">
-                                    {{ numberFormatter.format(donation.amount) }}
+                                    {{ formatNumber(donation.amount) }}
                                 </span>
                             </div>
                             <div class="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                                <span>{{ donation.payment_method ?? translations.payment_method_label }}</span>
+                                <span>{{ donation.method }}</span>
                                 <span>&middot;</span>
                                 <span>{{ new Date(donation.created_at).toLocaleString() }}</span>
                             </div>

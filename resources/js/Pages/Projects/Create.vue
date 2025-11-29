@@ -47,7 +47,6 @@ const form = useForm({
     description: '',
     target_amount: '',
     start_date: '',
-    end_date: '',
     image: null as File | null,
 });
 
@@ -150,7 +149,7 @@ const onFileChange = (event: Event) => {
                             </div>
                         </div>
 
-                        <div class="grid gap-4 md:grid-cols-2">
+                        <div class="grid gap-2 md:grid-cols-2">
                             <div class="grid gap-2">
                                 <Label for="start_date">
                                     {{ translations.fields.start_date }}
@@ -163,20 +162,6 @@ const onFileChange = (event: Event) => {
                                     :class="{ 'border-destructive': form.errors.start_date }"
                                 />
                                 <InputError :message="form.errors.start_date" />
-                            </div>
-
-                            <div class="grid gap-2">
-                                <Label for="end_date">
-                                    {{ translations.fields.end_date }}
-                                </Label>
-                                <Input
-                                    id="end_date"
-                                    v-model="form.end_date"
-                                    type="date"
-                                    required
-                                    :class="{ 'border-destructive': form.errors.end_date }"
-                                />
-                                <InputError :message="form.errors.end_date" />
                             </div>
                         </div>
                     </CardContent>
