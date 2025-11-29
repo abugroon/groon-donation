@@ -52,6 +52,7 @@ class HomeController extends Controller
                 'contact_title' => __('home.contact_title'),
                 'contact_description' => __('home.contact_description'),
                 'contact_email_label' => __('home.contact_email_label'),
+                'privacy_policy' => __('home.privacy_policy'),
                 'dashboard_label' => __('navigation.dashboard'),
                 'projects_label' => __('navigation.projects'),
                 'login_label' => __('navigation.login'),

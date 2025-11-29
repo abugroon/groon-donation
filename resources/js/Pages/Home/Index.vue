@@ -64,6 +64,7 @@ interface Translations {
     contact_title: string;
     contact_description: string;
     contact_email_label: string;
+    privacy_policy: string;
     dashboard_label: string;
     projects_label: string;
     login_label: string;
@@ -336,11 +337,25 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                         </a>
                     </div>
                 </div>
-                <div class="mt-10 flex flex-col gap-2 border-t border-white/5 pt-6 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
+                <div
+                    class="mt-10 flex flex-col gap-2 border-t border-white/5 pt-6 text-xs text-white/50 md:flex-row md:items-center md:justify-between"
+                >
                     <span>© {{ new Date().getFullYear() }} {{ page.props.name }}. All rights reserved.</span>
-                    <span>
-                        <a href="https://me.moawiaabugroon.com" target="_blank">{{ translations.testimonial_author }}</a>
-                    </span>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <Link
+                            href="/privacy-policy"
+                            class="text-emerald-300 transition hover:text-emerald-200"
+                        >
+                            {{ translations.privacy_policy }}
+                        </Link>
+                        <a
+                            href="https://me.moawiaabugroon.com"
+                            target="_blank"
+                            class="transition hover:text-emerald-200"
+                        >
+                            {{ translations.testimonial_author }}
+                        </a>
+                    </div>
                 </div>
             </div>
         </footer>
