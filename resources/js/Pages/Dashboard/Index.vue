@@ -13,6 +13,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import { dashboard } from '@/routes';
 import { index as projectsIndex } from '@/routes/projects';
 import { computed } from 'vue';
+import { formatNumber } from '@/utils/formatNumber';
 
 interface Stats {
     projects_total: number;
@@ -54,24 +55,6 @@ const props = defineProps<{
 const breadcrumbs = computed<BreadcrumbItemType[]>(() => [
     { title: props.translations.title, href: dashboard() },
 ]);
-
-const formatNumber = ( value :any ) =>  {
-    const numeric = Number(value || 0);
-
-    try {
-        const hasFraction = Math.abs(numeric % 1) > 0;
-
-        return new Intl.NumberFormat('en-SD', {
-            minimumFractionDigits: hasFraction ? 2 : 0,
-            maximumFractionDigits: hasFraction ? 2 : 0,
-        }).format(numeric);
-    } catch (error) {
-        return numeric.toLocaleString('en-SD', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-        });
-    }
-};
 
 // const currencyFormatter = new Intl.NumberFormat('en', {
 //     minimumFractionDigits: 2,

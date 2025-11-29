@@ -16,12 +16,14 @@ import { create as createProject, index as projectsIndex } from '@/routes/projec
 import type { AppPageProps, NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
 import {
+    Building2,
     HeartHandshake,
     Home as HomeIcon,
     LayoutGrid,
     LifeBuoy,
     Mail,
     PlusCircle,
+    UserRound,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from './AppLogo.vue';
@@ -53,11 +55,23 @@ const mainNavItems = computed<NavItem[]>(() => {
     }
 
     if (authUser.value?.role === 'admin') {
-        items.push({
-            title: navigation.value.manage_projects ?? 'Manage projects',
-            href: createProject(),
-            icon: PlusCircle,
-        });
+        items.push(
+            {
+                title: navigation.value.manage_projects ?? 'Manage projects',
+                href: createProject(),
+                icon: PlusCircle,
+            },
+            {
+                title: navigation.value.bank_accounts ?? 'Bank accounts',
+                href: '/admin/bank-accounts',
+                icon: Building2,
+            },
+            {
+                title: navigation.value.users ?? 'Users',
+                href: '/admin/users',
+                icon: UserRound,
+            },
+        );
     }
 
     return items;
