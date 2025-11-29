@@ -17,16 +17,12 @@ class BankAccountRequest extends FormRequest
      */
     public function rules(): array
     {
-        $bankAccountId = $this->route('bank_account')?->id ?? null;
-
         return [
             'account_name' => ['required', 'string', 'max:150'],
             'bank_name' => ['required', 'string', 'max:150'],
-            'iban' => ['required', 'string', 'max:150', Rule::unique('bank_accounts', 'iban')->ignore($bankAccountId)],
+            'iban' => ['required', 'string', 'max:150', Rule::unique('bank_accounts', 'iban')->ignore($this->route('bank_account'))],
             'account_number' => ['required', 'string', 'max:100'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
-            'projects' => ['nullable', 'array'],
-            'projects.*' => ['exists:projects,id'],
         ];
     }
 
@@ -50,8 +46,6 @@ class BankAccountRequest extends FormRequest
             'account_number.max' => 'رقم الحساب طويل جداً.',
             'status.required' => 'حالة الحساب مطلوبة.',
             'status.in' => 'حالة الحساب يجب أن تكون نشط أو غير نشط.',
-            'projects.array' => 'قائمة المشاريع غير صالحة.',
-            'projects.*.exists' => 'أحد المشاريع المحددة غير موجود.',
         ];
     }
 }

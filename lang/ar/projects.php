@@ -24,4 +24,8 @@ return [
         'start_date' => 'تاريخ البدء',
         'image' => 'صورة المشروع',
     ],
+    'bank_summary_title' => 'ملخص حسابات المشروع',
+    'sql_examples' => 'أمثلة استعلام SQL',
+    'total_received' => 'إجمالي المبلغ المستلم',
+    'donations_count' => 'عدد التبرعات',
 ];

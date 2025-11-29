@@ -24,4 +24,8 @@ return [
         'start_date' => 'Start date',
         'image' => 'Project image',
     ],
+    'bank_summary_title' => 'Project bank accounts summary',
+    'sql_examples' => 'SQL examples',
+    'total_received' => 'Total received',
+    'donations_count' => 'Donations count',
 ];

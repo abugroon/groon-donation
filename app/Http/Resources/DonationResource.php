@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 /** @mixin \App\Models\Donation */
 class DonationResource extends JsonResource
@@ -24,6 +25,10 @@ class DonationResource extends JsonResource
             'method' => $this->method,
             'status' => $this->status,
             'bank_account_id' => $this->bank_account_id,
+            'cash_description' => $this->cash_description,
+            'transfer_receipt_url' => $this->transfer_receipt
+                ? Storage::disk('public')->url($this->transfer_receipt)
+                : null,
             'created_at' => $this->created_at?->toDateTimeString(),
         ];
     }
