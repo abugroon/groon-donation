@@ -22,7 +22,6 @@ return [
         'description' => 'Project description',
         'target_amount' => 'Target amount',
         'start_date' => 'Start date',
-        'end_date' => 'End date',
         'image' => 'Project image',
     ],
 ];

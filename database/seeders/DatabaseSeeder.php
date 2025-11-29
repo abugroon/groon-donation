@@ -55,7 +55,6 @@ class DatabaseSeeder extends Seeder
                 'description' => 'مشروع يهدف إلى بناء مسجد جديد لخدمة المجتمع المحلي.',
                 'target_amount' => 50000,
                 'start_date' => Carbon::now()->subMonths(2)->toDateString(),
-                'end_date' => Carbon::now()->addMonths(4)->toDateString(),
             ],
             [
                 'slug' => 'dig-well',
@@ -63,7 +62,6 @@ class DatabaseSeeder extends Seeder
                 'description' => 'توفير مياه نظيفة لقرية محتاجة من خلال حفر بئر عميق.',
                 'target_amount' => 20000,
                 'start_date' => Carbon::now()->subMonth()->toDateString(),
-                'end_date' => Carbon::now()->addMonths(2)->toDateString(),
             ],
             [
                 'slug' => 'sponsor-orphan',
@@ -71,7 +69,6 @@ class DatabaseSeeder extends Seeder
                 'description' => 'تأمين احتياجات طفل يتيم لمدة عام كامل.',
                 'target_amount' => 12000,
                 'start_date' => Carbon::now()->subWeeks(3)->toDateString(),
-                'end_date' => Carbon::now()->addMonths(6)->toDateString(),
             ],
         ];
 
@@ -90,7 +87,6 @@ class DatabaseSeeder extends Seeder
                 'description' => $data['description'],
                 'target_amount' => $data['target_amount'],
                 'start_date' => $data['start_date'],
-                'end_date' => $data['end_date'],
                 'image' => $imagePath,
                 'collected_amount' => 0,
                 'progress' => 0,
@@ -108,12 +104,14 @@ class DatabaseSeeder extends Seeder
      */
     private function seedDonations(array $projects): void
     {
+        $placeholderImage = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=');
+
         $donations = [
-            ['project' => 'build-mosque', 'donor_name' => 'محمد علي', 'amount' => 10000, 'is_anonymous' => false, 'payment_method' => 'bank'],
-            ['project' => 'build-mosque', 'donor_name' => null, 'amount' => 7500, 'is_anonymous' => true, 'payment_method' => 'cash'],
-            ['project' => 'dig-well', 'donor_name' => 'Aisha', 'amount' => 5000, 'is_anonymous' => false, 'payment_method' => 'bank'],
-            ['project' => 'dig-well', 'donor_name' => 'Omar', 'amount' => 3500, 'is_anonymous' => false, 'payment_method' => 'card'],
-            ['project' => 'sponsor-orphan', 'donor_name' => null, 'amount' => 4000, 'is_anonymous' => true, 'payment_method' => 'bank'],
+            ['project' => 'build-mosque', 'donor_name' => 'محمد علي', 'amount' => 10000, 'anonymous' => false, 'method' => 'bank', 'cash_description' => null],
+            ['project' => 'build-mosque', 'donor_name' => 'متبرع كريم', 'amount' => 7500, 'anonymous' => true, 'method' => 'cash', 'cash_description' => 'تم التسليم في المقر الرئيسي'],
+            ['project' => 'dig-well', 'donor_name' => 'Aisha', 'amount' => 5000, 'anonymous' => false, 'method' => 'bank', 'cash_description' => null],
+            ['project' => 'dig-well', 'donor_name' => 'Omar', 'amount' => 3500, 'anonymous' => false, 'method' => 'cash', 'cash_description' => 'تم الاستلام عبر مندوب ميداني'],
+            ['project' => 'sponsor-orphan', 'donor_name' => 'مانح مجهول', 'amount' => 4000, 'anonymous' => true, 'method' => 'bank', 'cash_description' => null],
         ];
 
         foreach ($donations as $index => $donationData) {
@@ -123,21 +121,26 @@ class DatabaseSeeder extends Seeder
                 continue;
             }
 
-            $donation = Donation::create([
+            $receiptPath = "receipts/demo-{$index}.png";
+
+            if (! Storage::disk('public')->exists($receiptPath)) {
+                Storage::disk('public')->put($receiptPath, $placeholderImage);
+            }
+
+            Donation::create([
                 'project_id' => $project->id,
                 'donor_name' => $donationData['donor_name'],
                 'amount' => $donationData['amount'],
-                'is_anonymous' => $donationData['is_anonymous'],
-                'payment_method' => $donationData['payment_method'],
+                'anonymous' => $donationData['anonymous'],
+                'method' => $donationData['method'],
+                'cash_description' => $donationData['cash_description'],
+                'transfer_receipt' => $receiptPath,
+                'status' => Donation::STATUS_APPROVED,
                 'created_at' => Carbon::now()->subDays(5 - $index),
+                'bank_account_id' => null,
             ]);
 
-            $project->collected_amount += $donation->amount;
-            $project->progress = $project->target_amount > 0
-                ? round(min(100, ($project->collected_amount / $project->target_amount) * 100), 2)
-                : 0;
-            $project->status = $project->progress >= 100 ? 'completed' : ($project->progress > 0 ? 'in_progress' : 'open');
-            $project->save();
+            $project->refreshProgressFromDonations();
         }
     }
 }

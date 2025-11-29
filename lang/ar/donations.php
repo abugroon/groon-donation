@@ -7,6 +7,9 @@ return [
     'amount' => 'المبلغ',
     'donor_name' => 'اسم المتبرع',
     'payment_method' => 'طريقة الدفع',
-    'created' => 'تم تسجيل التبرع بنجاح.',
+    'created' => 'تم إرسال التبرع للمراجعة بنجاح.',
     'empty' => 'لا توجد تبرعات حتى الآن.',
+    'status_pending' => 'قيد المراجعة',
+    'status_approved' => 'مقبول',
+    'status_rejected' => 'مرفوض',
 ];

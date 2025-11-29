@@ -18,6 +18,7 @@ import {
 } from '@/routes';
 import { index as projectsIndex, show as showProject } from '@/routes/projects';
 import { computed } from 'vue';
+import { formatNumber } from '@/utils/formatNumber';
 
 interface Stats {
     projects_total: number;
@@ -83,24 +84,6 @@ const props = defineProps<{
 
 const page = usePage<AppPageProps>();
 const authUser = computed(() => page.props.auth?.user ?? null);
-
-const formatNumber = ( value :any ) =>  {
-    const numeric = Number(value || 0);
-
-    try {
-        const hasFraction = Math.abs(numeric % 1) > 0;
-
-        return new Intl.NumberFormat('en-SD', {
-            minimumFractionDigits: hasFraction ? 2 : 0,
-            maximumFractionDigits: hasFraction ? 2 : 0,
-        }).format(numeric);
-    } catch (error) {
-        return numeric.toLocaleString('en-SD', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-        });
-    }
-};
 
 const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`;
 </script>

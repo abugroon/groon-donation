@@ -10,7 +10,11 @@ class Donation extends Model
 {
     use HasFactory;
 
-    public const UPDATED_AT = null;
+    public const UPDATED_AT = 'updated_at';
+
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_REJECTED = 'rejected';
 
     /**
      * The attributes that are mass assignable.
@@ -21,8 +25,12 @@ class Donation extends Model
         'project_id',
         'donor_name',
         'amount',
-        'is_anonymous',
-        'payment_method',
+        'anonymous',
+        'method',
+        'status',
+        'bank_account_id',
+        'transfer_receipt',
+        'cash_description',
         'created_at',
     ];
 
@@ -35,8 +43,9 @@ class Donation extends Model
     {
         return [
             'amount' => 'decimal:2',
-            'is_anonymous' => 'boolean',
+            'anonymous' => 'boolean',
             'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
@@ -46,5 +55,13 @@ class Donation extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Bank account that received the donation.
+     */
+    public function bankAccount(): BelongsTo
+    {
+        return $this->belongsTo(BankAccount::class);
     }
 }

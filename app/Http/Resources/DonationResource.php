@@ -20,8 +20,10 @@ class DonationResource extends JsonResource
             'project_id' => $this->project_id,
             'donor_name' => $this->donor_name,
             'amount' => (float) $this->amount,
-            'is_anonymous' => (bool) $this->is_anonymous,
-            'payment_method' => $this->payment_method,
+            'anonymous' => (bool) $this->anonymous,
+            'method' => $this->method,
+            'status' => $this->status,
+            'bank_account_id' => $this->bank_account_id,
             'created_at' => $this->created_at?->toDateTimeString(),
         ];
     }
