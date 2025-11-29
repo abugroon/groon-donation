@@ -17,7 +17,7 @@ class HomeController extends Controller
     {
         $featuredProjects = Project::query()
             ->orderByDesc('progress')
-            ->orderBy('end_date')
+            ->orderBy('start_date')
             ->take(3)
             ->get();
 

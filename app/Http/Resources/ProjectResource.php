@@ -27,13 +27,11 @@ class ProjectResource extends JsonResource
             'image' => $this->image,
             'image_url' => $this->image ? Storage::disk('public')->url($this->image) : null,
             'start_date' => $this->start_date?->toDateString(),
-            'end_date' => $this->end_date?->toDateString(),
-            'end_date_formatted' => $this->end_date_formatted,
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),
             'donations' => $this->whenLoaded(
-                'donations',
-                fn () => DonationResource::collection($this->donations)->resolve(),
+                'approvedDonations',
+                fn () => DonationResource::collection($this->approvedDonations)->resolve(),
             ),
         ];
     }
