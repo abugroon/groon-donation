@@ -22,7 +22,10 @@ return [
         'description' => 'Project description',
         'target_amount' => 'Target amount',
         'start_date' => 'Start date',
-        'end_date' => 'End date',
         'image' => 'Project image',
     ],
+    'bank_summary_title' => 'Project bank accounts summary',
+    'sql_examples' => 'SQL examples',
+    'total_received' => 'Total received',
+    'donations_count' => 'Donations count',
 ];

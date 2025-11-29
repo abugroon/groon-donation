@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Donation\StoreDonationRequest;
 use App\Http\Resources\DonationResource;
+use App\Mail\PendingDonationMail;
 use App\Models\Donation;
 use App\Models\Project;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class DonationController extends Controller
 {
@@ -17,7 +18,7 @@ class DonationController extends Controller
      */
     public function index(Project $project): JsonResponse
     {
-        $donations = $project->donations()->latest('created_at')->get();
+        $donations = $project->approvedDonations()->latest('created_at')->get();
 
         return DonationResource::collection($donations)->response();
     }
@@ -28,38 +29,32 @@ class DonationController extends Controller
     public function store(StoreDonationRequest $request): JsonResponse|RedirectResponse
     {
         $data = $request->validated();
+        if ($request->hasFile('transfer_receipt')) {
+            $data['transfer_receipt'] = $request->file('transfer_receipt')->store('receipts', 'public');
+        }
 
-        $donation = DB::transaction(function () use ($data) {
-            /** @var Project $project */
-            $project = Project::lockForUpdate()->findOrFail($data['project_id']);
+        if (($data['method'] ?? null) === 'cash') {
+            $data['bank_account_id'] = null;
+        }
 
-            $donation = Donation::create($data);
+        $data['status'] = Donation::STATUS_PENDING;
 
-            $project->collected_amount = $project->collected_amount + $data['amount'];
-            $project->progress = round(min(100, ($project->collected_amount / $project->target_amount) * 100), 2);
-            $project->status = $project->progress >= 100 ? 'completed' : ($project->progress > 0 ? 'in_progress' : 'open');
+        $donation = Donation::create($data);
 
-            if ($project->status === 'completed' && ! $project->end_date) {
-                $project->end_date = now();
-            }
+        $adminAddress = config('mail.from.address', 'admin@example.com');
 
-            $project->save();
-
-            return $donation;
-        });
-
-        $project = Project::findOrFail($data['project_id']);
+        Mail::to($adminAddress)
+            ->send(new PendingDonationMail($donation));
 
         if ($request->wantsJson()) {
             return response()->json([
                 'message' => __('donations.created'),
                 'data' => new DonationResource($donation),
-                'project_progress' => $project->progress,
             ], 201);
         }
 
         return redirect()
-            ->route('projects.show', $project)
+            ->route('projects.show', $donation->project)
             ->with('success', __('donations.created'));
     }
 }

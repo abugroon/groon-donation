@@ -20,6 +20,7 @@ import {
 } from '@/routes/projects';
 import { dashboard } from '@/routes';
 import { computed } from 'vue';
+import { formatNumber } from '@/utils/formatNumber';
 
 interface Project {
     id: number;
@@ -58,11 +59,6 @@ const breadcrumbs = computed<BreadcrumbItemType[]>(() => [
     { title: props.translations.dashboardTitle, href: dashboard() },
     { title: props.translations.title, href: projectsIndex() },
 ]);
-
-const numberFormatter = new Intl.NumberFormat(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-});
 
 const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`;
 </script>
@@ -154,11 +150,7 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                                     {{ translations.target_label }}
                                 </span>
                                 <span>
-                                    {{
-                                        numberFormatter.format(
-                                            project.target_amount,
-                                        )
-                                    }}
+                                    {{ formatNumber(project.target_amount) }}
                                 </span>
                             </div>
                             <div class="flex items-center justify-between">
@@ -166,11 +158,7 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                                     {{ translations.collected_label }}
                                 </span>
                                 <span>
-                                    {{
-                                        numberFormatter.format(
-                                            project.collected_amount,
-                                        )
-                                    }}
+                                    {{ formatNumber(project.collected_amount) }}
                                 </span>
                             </div>
                         </div>

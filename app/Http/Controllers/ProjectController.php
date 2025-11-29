@@ -99,7 +99,7 @@ class ProjectController extends Controller
      */
     public function show(Request $request, Project $project): JsonResponse|Response
     {
-        $project->load(['donations' => fn ($query) => $query->latest('created_at')]);
+        $project->load(['approvedDonations' => fn ($query) => $query->latest('created_at')]);
         $resource = new ProjectResource($project);
 
         if ($request->wantsJson()) {
@@ -143,20 +143,6 @@ class ProjectController extends Controller
             $data['image'] = $request->file('image')->store('projects', 'public');
         }
 
-        $originalEndDate = $project->end_date;
-
-        if (($data['status'] ?? null) === 'completed') {
-            unset($data['end_date']);
-        }
-
-        if (
-            $project->status === 'completed'
-            && $project->end_date
-            && (! isset($data['status']) || $data['status'] === 'completed')
-        ) {
-            unset($data['end_date']);
-        }
-
         $project->fill($data);
 
         if ($project->isDirty('target_amount') || $project->isDirty('collected_amount')) {
@@ -169,12 +155,6 @@ class ProjectController extends Controller
             $project->status = 'completed';
         } elseif (! isset($data['status'])) {
             $project->status = $this->resolveStatus($project);
-        }
-
-        if ($project->status === 'completed') {
-            $project->end_date = $originalEndDate ?? now();
-        } else {
-            $project->end_date = null;
         }
 
         $project->save();
