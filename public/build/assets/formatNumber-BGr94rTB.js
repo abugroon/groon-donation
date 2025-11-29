@@ -1,0 +1,1 @@
+const m=i=>{const t=Number(i||0);try{const r=Math.abs(t%1)>0;return new Intl.NumberFormat("en-SD",{minimumFractionDigits:r?2:0,maximumFractionDigits:r?2:0}).format(t)}catch{return t.toLocaleString("en-SD",{minimumFractionDigits:0,maximumFractionDigits:2})}};export{m as f};
