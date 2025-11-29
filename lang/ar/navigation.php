@@ -5,6 +5,7 @@ return [
     'projects' => 'المشروعات',
     'dashboard' => 'لوحة التحكم',
     'donations' => 'التبرعات',
+    'donation_requests' => 'طلبات التبرع',
     'bank_accounts' => 'الحسابات البنكية',
     'users' => 'المستخدمون',
     'manage_projects' => 'إدارة المشاريع',

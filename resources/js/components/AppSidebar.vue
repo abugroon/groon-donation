@@ -17,6 +17,7 @@ import type { AppPageProps, NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
 import {
     Building2,
+    HandCoins,
     HeartHandshake,
     Home as HomeIcon,
     LayoutGrid,
@@ -60,6 +61,11 @@ const mainNavItems = computed<NavItem[]>(() => {
                 title: navigation.value.manage_projects ?? 'Manage projects',
                 href: createProject(),
                 icon: PlusCircle,
+            },
+            {
+                title: navigation.value.donation_requests ?? 'Donation requests',
+                href: '/admin/donations',
+                icon: HandCoins,
             },
             {
                 title: navigation.value.bank_accounts ?? 'Bank accounts',

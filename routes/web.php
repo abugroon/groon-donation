@@ -21,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 
     Route::prefix('admin')->as('admin.')->group(function () {
+        Route::get('donations', [DonationReviewController::class, 'index'])->name('donations.index');
         Route::resource('bank-accounts', BankAccountController::class)->except(['show']);
         Route::get('projects/{project}', [AdminProjectController::class, 'show'])->name('projects.show');
         Route::get('donations/{donation}/review', [DonationReviewController::class, 'show'])->name('donations.review');

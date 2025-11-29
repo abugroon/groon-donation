@@ -16,6 +16,61 @@ use Inertia\Response;
 
 class DonationReviewController extends Controller
 {
+    public function index(): Response
+    {
+        $donations = Donation::with('project')
+            ->latest()
+            ->paginate(10)
+            ->through(fn (Donation $donation) => [
+                'id' => $donation->id,
+                'project' => [
+                    'id' => $donation->project->id,
+                    'name' => $donation->project->name,
+                ],
+                'donor_name' => $donation->donor_name,
+                'anonymous' => (bool) $donation->anonymous,
+                'amount' => (float) $donation->amount,
+                'status' => $donation->status,
+                'created_at' => $donation->created_at?->toIso8601String(),
+                'transfer_receipt_url' => $donation->transfer_receipt
+                    ? Storage::disk('public')->url($donation->transfer_receipt)
+                    : null,
+            ]);
+
+        $bankAccounts = BankAccount::where('status', 'active')
+            ->orderBy('account_name')
+            ->get(['id', 'account_name', 'bank_name']);
+
+        return Inertia::render('Admin/Donations/Index', [
+            'donations' => $donations,
+            'bankAccounts' => $bankAccounts,
+            'translations' => [
+                'title' => __('donations.requests_title'),
+                'empty' => __('donations.requests_empty'),
+                'approve' => __('donations.approve'),
+                'reject' => __('donations.reject'),
+                'fields' => [
+                    'donor_name' => __('donations.donor_name'),
+                    'amount' => __('donations.amount'),
+                    'project' => __('donations.project_name'),
+                    'date' => __('donations.date'),
+                    'receipt' => __('donations.receipt'),
+                    'status' => __('donations.status_label'),
+                    'bank_account' => __('donations.bank_account'),
+                ],
+                'status_labels' => [
+                    'pending' => __('donations.status_pending'),
+                    'approved' => __('donations.status_approved'),
+                    'rejected' => __('donations.status_rejected'),
+                ],
+                'view_full' => __('donations.view_receipt'),
+                'select_bank' => __('donations.select_bank_account'),
+                'anonymous' => __('donations.anonymous'),
+                'dashboardTitle' => __('dashboard.title'),
+            ],
+        ]);
+    }
+
     public function show(Request $request, Donation $donation): Response|JsonResponse
     {
         $bankAccounts = BankAccount::where('status', 'active')
