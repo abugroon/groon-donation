@@ -20,8 +20,8 @@ class DonationReviewController extends Controller
     {
         $donations = Donation::with('project')
             ->latest()
-            ->where('status', '!=',Donation::STATUS_APPROVED)
-            ->paginate(10)
+//            ->where('status', '!=',Donation::STATUS_APPROVED)
+            ->paginate(100)
             ->through(fn (Donation $donation) => [
                 'id' => $donation->id,
                 'project' => [
