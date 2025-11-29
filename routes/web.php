@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\BankAccountController;
+use App\Http\Controllers\Admin\DonationReviewController;
+use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\HomeController;
@@ -15,6 +19,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('projects', [ProjectController::class, 'store'])->name('projects.store');
     Route::put('projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
     Route::delete('projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+
+    Route::prefix('admin')->as('admin.')->group(function () {
+        Route::get('donations', [DonationReviewController::class, 'index'])->name('donations.index');
+        Route::resource('bank-accounts', BankAccountController::class)->except(['show']);
+        Route::get('projects/{project}', [AdminProjectController::class, 'show'])->name('projects.show');
+        Route::get('donations/{donation}/review', [DonationReviewController::class, 'show'])->name('donations.review');
+        Route::put('donations/{donation}/review', [DonationReviewController::class, 'update'])->name('donations.updateStatus');
+        Route::resource('users', UserController::class)->except(['show']);
+    });
 });
 
 Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');

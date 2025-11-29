@@ -22,7 +22,10 @@ return [
         'description' => 'وصف المشروع',
         'target_amount' => 'المبلغ المستهدف',
         'start_date' => 'تاريخ البدء',
-        'end_date' => 'تاريخ الانتهاء',
         'image' => 'صورة المشروع',
     ],
+    'bank_summary_title' => 'ملخص حسابات المشروع',
+    'sql_examples' => 'أمثلة استعلام SQL',
+    'total_received' => 'إجمالي المبلغ المستلم',
+    'donations_count' => 'عدد التبرعات',
 ];
