@@ -15,8 +15,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('account_name');
             $table->string('bank_name');
-            $table->string('iban')->unique();
-            $table->string('account_number');
+            $table->string('iban')->nullable();
+            $table->string('account_number')->unique();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->softDeletes();
             $table->timestamps();

@@ -56,20 +56,20 @@ class DatabaseSeeder extends Seeder
                 'target_amount' => 50000,
                 'start_date' => Carbon::now()->subMonths(2)->toDateString(),
             ],
-            [
-                'slug' => 'dig-well',
-                'name' => 'حفر بئر',
-                'description' => 'توفير مياه نظيفة لقرية محتاجة من خلال حفر بئر عميق.',
-                'target_amount' => 20000,
-                'start_date' => Carbon::now()->subMonth()->toDateString(),
-            ],
-            [
-                'slug' => 'sponsor-orphan',
-                'name' => 'كفالة يتيم',
-                'description' => 'تأمين احتياجات طفل يتيم لمدة عام كامل.',
-                'target_amount' => 12000,
-                'start_date' => Carbon::now()->subWeeks(3)->toDateString(),
-            ],
+//            [
+//                'slug' => 'dig-well',
+//                'name' => 'حفر بئر',
+//                'description' => 'توفير مياه نظيفة لقرية محتاجة من خلال حفر بئر عميق.',
+//                'target_amount' => 20000,
+//                'start_date' => Carbon::now()->subMonth()->toDateString(),
+//            ],
+//            [
+//                'slug' => 'sponsor-orphan',
+//                'name' => 'كفالة يتيم',
+//                'description' => 'تأمين احتياجات طفل يتيم لمدة عام كامل.',
+//                'target_amount' => 12000,
+//                'start_date' => Carbon::now()->subWeeks(3)->toDateString(),
+//            ],
         ];
 
         $projects = [];

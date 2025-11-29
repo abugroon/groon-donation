@@ -41,10 +41,12 @@ class DonationController extends Controller
 
         $donation = Donation::create($data);
 
-        $adminAddress = config('mail.from.address', 'admin@example.com');
+        $adminAddress = 'moawiaabugroon@gmail.com';
 
-        Mail::to($adminAddress)
-            ->send(new PendingDonationMail($donation));
+        if (config('app.env') == 'production') {
+            Mail::to($adminAddress)
+                ->send(new PendingDonationMail($donation));
+        }
 
         if ($request->wantsJson()) {
             return response()->json([

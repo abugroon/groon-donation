@@ -102,7 +102,6 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                     </div>
                     <div class="flex flex-col">
                         <span class="text-lg font-semibold leading-tight">{{ page.props.name }}</span>
-                        <span class="text-xs text-white/70">{{ page.props.quote.message }}</span>
                     </div>
                 </div>
 
@@ -327,14 +326,21 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                     </div>
                     <div class="space-y-3 text-sm text-white/70">
                         <div class="font-medium text-white">{{ translations.contact_email_label }}</div>
-                        <a href="mailto:team@charityhub.test" class="text-emerald-300 hover:text-emerald-200">
-                            team@charityhub.test
+                        <a href="mailto:moawiaabugroon@gmail.com" class="text-emerald-300 hover:text-emerald-200">
+                            moawiaabugroon@gmail.com
+                        </a>
+
+                        <div class="font-medium text-white">تواصل معنا على الواتساب</div>
+                        <a href="https://wa.me/+249113040255" target="_blank" class="text-emerald-300 hover:text-emerald-200">
+                            +249113040255
                         </a>
                     </div>
                 </div>
                 <div class="mt-10 flex flex-col gap-2 border-t border-white/5 pt-6 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
                     <span>© {{ new Date().getFullYear() }} {{ page.props.name }}. All rights reserved.</span>
-                    <span>{{ translations.testimonial_author }}</span>
+                    <span>
+                        <a href="https://me.moawiaabugroon.com" target="_blank">{{ translations.testimonial_author }}</a>
+                    </span>
                 </div>
             </div>
         </footer>

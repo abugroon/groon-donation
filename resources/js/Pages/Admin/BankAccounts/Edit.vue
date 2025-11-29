@@ -92,7 +92,6 @@ const submit = () => {
                             <Input
                                 id="iban"
                                 v-model="form.iban"
-                                required
                                 type="text"
                                 :class="{ 'border-destructive': form.errors.iban }"
                             />

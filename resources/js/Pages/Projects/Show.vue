@@ -35,7 +35,6 @@ interface Donation {
     anonymous: boolean;
     method: string;
     status: string;
-    bank_account_id: number | null;
     created_at: string;
 }
 
@@ -88,9 +87,8 @@ const form = useForm({
     donor_name: '',
     amount: '',
     anonymous: false,
-    method: 'cash',
+    method: 'bank',
     cash_description: '',
-    bank_account_id: '',
     transfer_receipt: null as File | null,
 });
 
@@ -100,8 +98,8 @@ const submitDonation = () => {
         forceFormData: true,
         onSuccess: () => {
             donationDialogOpen.value = false;
-            form.reset('donor_name', 'amount', 'method', 'cash_description', 'bank_account_id', 'transfer_receipt', 'anonymous');
-            form.method = 'cash';
+            form.reset('donor_name', 'amount', 'method', 'cash_description', 'transfer_receipt', 'anonymous');
+            form.method = 'bank';
             form.transfer_receipt = null;
         },
     });
@@ -247,19 +245,9 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                                     <Input
                                         id="cash_description"
                                         v-model="form.cash_description"
-                                        placeholder="أدخل تفاصيل الاستلام"
+                                        placeholder="من استلم منك المبلغ ؟"
                                     />
                                     <InputError :message="form.errors.cash_description" />
-                                </div>
-                                <div class="grid gap-2" v-if="form.method === 'bank'">
-                                    <Label for="bank_account_id">حساب بنكي مرتبط</Label>
-                                    <Input
-                                        id="bank_account_id"
-                                        v-model="form.bank_account_id"
-                                        type="number"
-                                        placeholder="أدخل رقم الحساب البنكي المرتبط"
-                                    />
-                                    <InputError :message="form.errors.bank_account_id" />
                                 </div>
                                 <div class="grid gap-2">
                                     <Label for="transfer_receipt">إيصال التحويل</Label>

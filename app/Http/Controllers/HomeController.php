@@ -48,7 +48,7 @@ class HomeController extends Controller
                 'projects_subtitle' => __('home.projects_subtitle'),
                 'view_all_projects' => __('home.view_all_projects'),
                 'testimonial_quote' => __('home.testimonial_quote'),
-                'testimonial_author' => __('home.testimonial_author'),
+                'testimonial_author' => 'Moawia Ahmed',
                 'contact_title' => __('home.contact_title'),
                 'contact_description' => __('home.contact_description'),
                 'contact_email_label' => __('home.contact_email_label'),

@@ -30,11 +30,6 @@ class StoreDonationRequest extends FormRequest
             'method' => ['required', Rule::in(['bank', 'cash'])],
             'transfer_receipt' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf'],
             'cash_description' => ['required_if:method,cash', 'nullable', 'string'],
-            'bank_account_id' => [
-                'required_if:method,bank',
-                'nullable',
-                Rule::exists('bank_accounts', 'id')->whereNull('deleted_at'),
-            ],
         ];
     }
 
