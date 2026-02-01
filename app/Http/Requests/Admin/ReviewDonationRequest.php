@@ -21,7 +21,7 @@ class ReviewDonationRequest extends FormRequest
             'status' => ['required', Rule::in(['approved', 'rejected'])],
             'bank_account_id' => [
                 'required_if:status,approved',
-                'nullable',
+                'integer',
                 Rule::exists('bank_accounts', 'id')
                     ->whereNull('deleted_at')
                     ->where('status', 'active'),

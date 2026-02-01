@@ -64,7 +64,7 @@ const deleteUser = (user: UserRow) => {
         <div class="p-4" dir="rtl">
             <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
                 <h1 class="text-2xl font-semibold">{{ translations.title }}</h1>
-                <Button as-child class="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button as-child class="btn btn-primary text-white">
                     <Link href="/admin/users/create">{{ translations.create }}</Link>
                 </Button>
             </div>
@@ -130,8 +130,8 @@ const deleteUser = (user: UserRow) => {
                     :href="link.url || '#'"
                     class="rounded-md border px-3 py-2 text-sm"
                     :class="{
-                        'bg-primary text-primary-foreground border-primary': link.active,
-                        'text-muted-foreground': !link.active,
+                        'btn btn-primary text-white': link.active,
+                        'text-[var(--text)] border-[var(--border)] hover:bg-[var(--bg-alt)]': !link.active,
                         'pointer-events-none opacity-60': !link.url,
                     }"
                     v-html="link.label"

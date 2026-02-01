@@ -192,7 +192,7 @@ watch(
                                         <div class="flex flex-wrap items-center justify-center gap-2" v-if="donation.status === 'pending'">
                                             <Button
                                                 size="sm"
-                                                class="bg-emerald-600 text-emerald-50 hover:bg-emerald-700"
+                                                class="btn btn-primary"
                                                 @click="openAction(donation, 'approved')"
                                             >
                                                 {{ translations.approve }}
@@ -218,6 +218,7 @@ watch(
                                 :variant="link.active ? 'default' : 'outline'"
                                 size="sm"
                                 as-child
+                                :class="link.active ? 'btn btn-primary text-white' : 'border-[var(--border)] text-[var(--text)] hover:bg-[var(--bg-alt)]'"
                             >
                                 <Link :href="link.url" preserve-scroll preserve-state v-html="link.label" />
                             </Button>
@@ -328,7 +329,11 @@ watch(
 
                 <div class="flex justify-between gap-2">
                     <Button variant="outline" type="button" @click="actionDialogOpen = false">إلغاء</Button>
-                    <Button type="button" :disabled="actionForm.processing" @click="submitAction">
+                    <Button
+                        type="button"
+                        :disabled="actionForm.processing || (actionForm.status === 'approved' && !actionForm.bank_account_id)"
+                        @click="submitAction"
+                    >
                         {{ actionForm.status === 'approved' ? translations.approve : translations.reject }}
                     </Button>
                 </div>

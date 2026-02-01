@@ -211,7 +211,10 @@ const submit = () => {
                         </div>
 
                         <div class="flex justify-end gap-2">
-                            <Button type="submit" :disabled="form.processing">
+                            <Button
+                                type="submit"
+                                :disabled="form.processing || (form.status === 'approved' && !form.bank_account_id)"
+                            >
                                 {{ translations.approve }} / {{ translations.reject }}
                             </Button>
                         </div>

@@ -65,7 +65,7 @@ const deleteAccount = (account: BankAccount) => {
         <div class="p-4" dir="rtl">
             <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
                 <h1 class="text-2xl font-semibold">{{ translations.title }}</h1>
-                <Button as-child class="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button as-child class="btn btn-primary text-white">
                     <Link href="/admin/bank-accounts/create">{{ translations.create }}</Link>
                 </Button>
             </div>
@@ -97,7 +97,7 @@ const deleteAccount = (account: BankAccount) => {
                                         <span
                                             class="rounded-full px-3 py-1 text-xs font-semibold"
                                             :class="{
-                                                'bg-emerald-100 text-emerald-700': account.status === 'active',
+                                                'bg-[var(--primary-100)] text-[var(--primary-600)]': account.status === 'active',
                                                 'bg-amber-100 text-amber-700': account.status === 'inactive',
                                             }"
                                         >
@@ -133,6 +133,7 @@ const deleteAccount = (account: BankAccount) => {
                                 :variant="link.active ? 'default' : 'outline'"
                                 size="sm"
                                 as-child
+                                :class="link.active ? 'btn btn-primary text-white' : 'border-[var(--border)] text-[var(--text)] hover:bg-[var(--bg-alt)]'"
                             >
                                 <Link :href="link.url" preserve-scroll preserve-state v-html="link.label" />
                             </Button>

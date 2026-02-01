@@ -30,7 +30,6 @@ import {
     home,
     login as loginRoute,
     logout as logoutRoute,
-    register as registerRoute,
 } from '@/routes';
 import { create as createProject, index as projectsIndex } from '@/routes/projects';
 import type { AppPageProps, BreadcrumbItem, NavItem } from '@/types';
@@ -96,7 +95,7 @@ const mainNavItems = computed<NavItem[]>(() => {
 </script>
 
 <template>
-    <div class="border-b border-sidebar-border/70 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white">
+    <div class="navbar text-[var(--text)]">
         <div class="mx-auto flex h-16 w-full items-center px-4 md:max-w-7xl">
             <!-- Mobile Menu -->
             <div class="lg:hidden">
@@ -105,15 +104,15 @@ const mainNavItems = computed<NavItem[]>(() => {
                         <Button
                             variant="ghost"
                             size="icon"
-                            class="mr-2 h-9 w-9 text-white hover:bg-white/10"
+                            class="mr-2 h-9 w-9 text-[var(--text)] hover:bg-[var(--bg-alt)]"
                         >
                             <Menu class="h-5 w-5" />
                         </Button>
                     </SheetTrigger>
-                    <SheetContent side="left" class="w-[300px] border-r border-white/10 bg-slate-950 text-white">
+                    <SheetContent side="left" class="w-[300px] border-r border-[var(--border)] bg-[var(--surface)] text-[var(--text)]">
                         <SheetTitle class="sr-only">{{ navigation.menu ?? 'Main menu' }}</SheetTitle>
                         <SheetHeader class="flex items-center justify-start gap-3 text-left">
-                            <AppLogoIcon class="size-6 fill-current text-white" />
+                            <AppLogoIcon class="size-6 fill-current text-[var(--text)]" />
                             <span class="text-sm font-medium">{{ page.props.name }}</span>
                         </SheetHeader>
                         <div class="flex h-full flex-1 flex-col justify-between space-y-6 py-6">
@@ -122,8 +121,8 @@ const mainNavItems = computed<NavItem[]>(() => {
                                     v-for="item in mainNavItems"
                                     :key="item.title"
                                     :href="item.href"
-                                    class="flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
-                                    :class="{ 'bg-white/10 text-white': isCurrentRoute(item.href) }"
+                                    class="flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium text-[var(--text-muted)] hover:bg-[var(--bg-alt)] hover:text-[var(--text)]"
+                                    :class="{ 'bg-[var(--primary-100)] text-[var(--primary-600)]': isCurrentRoute(item.href) }"
                                 >
                                     <component
                                         v-if="item.icon"
@@ -135,20 +134,17 @@ const mainNavItems = computed<NavItem[]>(() => {
                             </nav>
                             <div class="space-y-3">
                                 <template v-if="authUser">
-                                    <Button class="w-full bg-emerald-400 text-slate-900 hover:bg-emerald-300" as-child>
+                                    <Button class="btn btn-primary w-full" as-child>
                                         <Link :href="dashboard()">{{ navigation.dashboard ?? 'Dashboard' }}</Link>
                                     </Button>
-                                    <Button variant="ghost" class="w-full border border-white/10 text-white hover:bg-white/10" as-child>
+                                    <Button variant="ghost" class="w-full border border-[var(--border)] text-[var(--text)] hover:bg-[var(--bg-alt)]" as-child>
                                         <Link :href="logoutRoute()" method="post" as="button">
                                             {{ navigation.logout ?? 'Sign out' }}
                                         </Link>
                                     </Button>
                                 </template>
                                 <template v-else>
-                                    <Button class="w-full bg-emerald-400 text-slate-900 hover:bg-emerald-300" as-child>
-                                        <Link :href="registerRoute()">{{ navigation.register ?? 'Create account' }}</Link>
-                                    </Button>
-                                    <Button variant="ghost" class="w-full border border-white/10 text-white hover:bg-white/10" as-child>
+                                    <Button variant="ghost" class="w-full border border-[var(--border)] text-[var(--text)] hover:bg-[var(--bg-alt)]" as-child>
                                         <Link :href="loginRoute()">{{ navigation.login ?? 'Sign in' }}</Link>
                                     </Button>
                                 </template>
@@ -175,8 +171,8 @@ const mainNavItems = computed<NavItem[]>(() => {
                                 :class="[
                                     navigationMenuTriggerStyle(),
                                     isCurrentRoute(item.href)
-                                        ? 'bg-white/10 text-white'
-                                        : 'text-white/70 hover:bg-white/10 hover:text-white',
+                                        ? 'bg-[var(--primary-100)] text-[var(--primary-600)]'
+                                        : 'text-[var(--text-muted)] hover:bg-[var(--bg-alt)] hover:text-[var(--text)]',
                                     'h-9 cursor-pointer px-3',
                                 ]"
                                 :href="item.href"
@@ -190,7 +186,7 @@ const mainNavItems = computed<NavItem[]>(() => {
                             </Link>
                             <div
                                 v-if="isCurrentRoute(item.href)"
-                                class="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-emerald-400"
+                                class="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-[var(--primary)]"
                             ></div>
                         </NavigationMenuItem>
                     </NavigationMenuList>
@@ -204,7 +200,7 @@ const mainNavItems = computed<NavItem[]>(() => {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                class="relative size-10 w-auto rounded-full p-1 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-emerald-400"
+                                class="relative size-10 w-auto rounded-full p-1 text-[var(--text)] hover:bg-[var(--bg-alt)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
                             >
                                 <Avatar class="size-8 overflow-hidden rounded-full">
                                     <AvatarImage
@@ -212,7 +208,7 @@ const mainNavItems = computed<NavItem[]>(() => {
                                         :src="authUser.avatar"
                                         :alt="authUser.name"
                                     />
-                                    <AvatarFallback class="rounded-full bg-white/20 text-sm font-semibold text-white">
+                                    <AvatarFallback class="rounded-full bg-[var(--bg-alt)] text-sm font-semibold text-[var(--text)]">
                                         {{ getInitials(authUser.name) }}
                                     </AvatarFallback>
                                 </Avatar>
@@ -224,11 +220,8 @@ const mainNavItems = computed<NavItem[]>(() => {
                     </DropdownMenu>
                 </template>
                 <template v-else>
-                    <Button variant="ghost" class="hidden text-white hover:bg-white/10 lg:inline-flex" as-child>
+                    <Button variant="ghost" class="hidden text-[var(--text)] hover:bg-[var(--bg-alt)] lg:inline-flex" as-child>
                         <Link :href="loginRoute()">{{ navigation.login ?? 'Sign in' }}</Link>
-                    </Button>
-                    <Button class="hidden bg-emerald-400 text-slate-900 hover:bg-emerald-300 lg:inline-flex" as-child>
-                        <Link :href="registerRoute()">{{ navigation.register ?? 'Create account' }}</Link>
                     </Button>
                 </template>
             </div>
@@ -236,9 +229,9 @@ const mainNavItems = computed<NavItem[]>(() => {
 
         <div
             v-if="props.breadcrumbs.length > 1"
-            class="flex w-full border-t border-white/10 bg-slate-950/40"
+            class="flex w-full border-t border-[var(--border)] bg-[var(--bg-alt)]"
         >
-            <div class="mx-auto flex h-12 w-full items-center justify-start px-4 text-xs uppercase tracking-wide text-white/60 md:max-w-7xl">
+            <div class="mx-auto flex h-12 w-full items-center justify-start px-4 text-xs uppercase tracking-wide text-[var(--text-muted)] md:max-w-7xl">
                 <Breadcrumbs :breadcrumbs="breadcrumbs" />
             </div>
         </div>

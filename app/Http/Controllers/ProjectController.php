@@ -124,6 +124,8 @@ class ProjectController extends Controller
                 'donations_empty' => __('donations.empty'),
                 'cancel' => __('common.cancel'),
                 'fields' => __('projects.fields'),
+                'update_project' => 'تحديث المشروع',
+                'save_project' => __('projects.save'),
             ],
         ]);
     }

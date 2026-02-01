@@ -12,7 +12,7 @@ import type { BreadcrumbItemType } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { dashboard } from '@/routes';
 import { index as projectsIndex } from '@/routes/projects';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { formatNumber } from '@/utils/formatNumber';
 
 interface Stats {
@@ -90,6 +90,14 @@ const statusBreakdown = computed(() => {
 });
 
 const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`;
+const brokenImages = ref(new Set<number>());
+
+const hasImage = (project: ProjectSummary) =>
+    Boolean(project.image_url) && !brokenImages.value.has(project.id);
+
+const markBroken = (projectId: number) => {
+    brokenImages.value.add(projectId);
+};
 </script>
 
 <template>
@@ -109,7 +117,7 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                 <Card>
                     <CardHeader class="pb-2">
                         <CardDescription>{{ translations.projects_in_progress }}</CardDescription>
-                        <CardTitle class="text-3xl font-semibold text-amber-600">
+                        <CardTitle class="text-3xl font-semibold text-[var(--warning)]">
                             {{ stats.projects_in_progress }}
                         </CardTitle>
                     </CardHeader>
@@ -117,7 +125,7 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                 <Card>
                     <CardHeader class="pb-2">
                         <CardDescription>{{ translations.projects_completed }}</CardDescription>
-                        <CardTitle class="text-3xl font-semibold text-emerald-600">
+                        <CardTitle class="text-3xl font-semibold text-[var(--success)]">
                             {{ stats.projects_completed }}
                         </CardTitle>
                     </CardHeader>
@@ -125,7 +133,7 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                 <Card>
                     <CardHeader class="pb-2">
                         <CardDescription>{{ translations.donations_amount }}</CardDescription>
-                        <CardTitle class="text-3xl font-semibold text-primary">
+                        <CardTitle class="text-3xl font-semibold text-[var(--primary)]">
                             {{ formatNumber(stats.donations_amount) }}
                         </CardTitle>
                         <CardDescription>
@@ -147,9 +155,9 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                                 <span>{{ translations.overall_progress }}</span>
                                 <span>{{ stats.overall_progress }}%</span>
                             </div>
-                            <div class="h-3 w-full rounded-full bg-muted">
+                            <div class="progress h-3 w-full">
                                 <div
-                                    class="h-3 rounded-full bg-primary transition-all"
+                                    class="bar h-3 transition-all"
                                     :style="{ width: progressWidth(stats.overall_progress) }"
                                 />
                             </div>
@@ -164,9 +172,9 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                                     <span class="text-muted-foreground">{{ status.label }}</span>
                                     <span>{{ status.value }}%</span>
                                 </div>
-                                <div class="h-2 w-full rounded-full bg-muted">
+                                <div class="progress h-2 w-full">
                                     <div
-                                        class="h-2 rounded-full bg-primary/70 transition-all"
+                                        class="bar h-2 transition-all"
                                         :style="{ width: progressWidth(status.value) }"
                                     />
                                 </div>
@@ -194,16 +202,22 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                             >
                                 <div class="h-12 w-12 overflow-hidden rounded-md bg-muted">
                                     <img
-                                        v-if="project.image_url"
+                                        v-if="hasImage(project)"
                                         :src="project.image_url"
                                         :alt="project.name"
                                         class="h-full w-full object-cover"
+                                        @error="markBroken(project.id)"
                                     />
                                     <div
                                         v-else
-                                        class="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/10 to-primary/30 text-xs font-medium text-primary"
+                                        class="project-fallback project-fallback-pattern flex h-full w-full flex-col items-center justify-center gap-1 text-xs font-medium"
                                     >
-                                        {{ project.name.slice(0, 2).toUpperCase() }}
+                                        <span class="tracking-widest">
+                                            {{ project.name.slice(0, 2).toUpperCase() }}
+                                        </span>
+                                        <span class="text-[10px] font-medium text-[var(--text-muted)]">
+                                            {{ project.name }}
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="flex-1">
@@ -211,9 +225,9 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                                         <span>{{ project.name }}</span>
                                         <span>{{ project.progress }}%</span>
                                     </div>
-                                    <div class="h-1.5 w-full rounded-full bg-muted">
+                                    <div class="progress h-1.5 w-full">
                                         <div
-                                            class="h-1.5 rounded-full bg-primary/80"
+                                            class="bar h-1.5 transition-all"
                                             :style="{ width: progressWidth(project.progress) }"
                                         />
                                     </div>
@@ -231,7 +245,7 @@ const progressWidth = (value: number) => `${Math.min(100, Math.max(0, value))}%`
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button as-child variant="outline" class="w-full">
+                        <Button as-child class="btn btn-primary w-full text-white">
                             <Link :href="projectsIndex()">{{ translations.view_all_projects }}</Link>
                         </Button>
                     </CardFooter>
