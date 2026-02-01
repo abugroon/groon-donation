@@ -1,0 +1,1 @@
+import{c as o}from"./index-DbarGBSJ.js";import{d as t,a as r,B as n,n as c,e as p,o as l}from"./app-Bgs-BAzw.js";const f=t({__name:"CardDescription",props:{class:{}},setup(s){const e=s;return(a,m)=>(l(),r("p",{"data-slot":"card-description",class:c(p(o)("text-muted-foreground text-sm",e.class))},[n(a.$slots,"default")],2))}});export{f as _};

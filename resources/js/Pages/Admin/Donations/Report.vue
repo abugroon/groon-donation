@@ -58,11 +58,13 @@ interface PaginatedDonations {
 
 interface Translations {
     title: string;
+    filters_title: string;
     project_label: string;
     bank_account_label: string;
     all_projects: string;
     all_accounts: string;
     donor_label: string;
+    anonymous_label: string;
     amount_label: string;
     date_label: string;
     receipt_label: string;
@@ -145,7 +147,7 @@ const isPdfReceipt = computed(() =>
 
             <Card class="mb-6">
                 <CardHeader>
-                    <CardTitle class="text-lg font-semibold">الفلاتر</CardTitle>
+                    <CardTitle class="text-lg font-semibold">{{ translations.filters_title }}</CardTitle>
                 </CardHeader>
                 <CardContent class="grid gap-4 md:grid-cols-2">
                     <div class="grid gap-2">
@@ -246,8 +248,8 @@ const isPdfReceipt = computed(() =>
                                     <td class="px-4 py-3 font-medium">
                                         {{
                                             donation.anonymous
-                                                ? translations.donor_label
-                                                : donation.donor_name ?? translations.donor_label
+                                                ? translations.anonymous_label
+                                                : donation.donor_name ?? translations.anonymous_label
                                         }}
                                     </td>
                                     <td class="px-4 py-3">{{ formatNumber(donation.amount) }}</td>

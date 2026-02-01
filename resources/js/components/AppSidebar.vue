@@ -68,7 +68,7 @@ const mainNavItems = computed<NavItem[]>(() => {
                 icon: HandCoins,
             },
             {
-                title: navigation.value.donations_report ?? 'Donations report',
+                title: navigation.value.donations_report ?? 'تقرير التبرعات',
                 href: '/admin/donations-report',
                 icon: HandCoins,
             },

@@ -101,11 +101,13 @@ class DonationReportController extends Controller
             ],
             'translations' => [
                 'title' => 'تقرير التبرعات',
+                'filters_title' => 'الفلاتر',
                 'project_label' => 'المشروع',
                 'bank_account_label' => 'الحساب البنكي',
                 'all_projects' => 'كل المشاريع',
                 'all_accounts' => 'كل الحسابات',
                 'donor_label' => 'المتبرع',
+                'anonymous_label' => 'مجهول',
                 'amount_label' => 'المبلغ',
                 'date_label' => 'التاريخ',
                 'receipt_label' => 'الإيصال',
